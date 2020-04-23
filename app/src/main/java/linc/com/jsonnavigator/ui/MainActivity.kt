@@ -2,6 +2,7 @@ package linc.com.jsonnavigator.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import linc.com.jsonnavigator.R
 import linc.com.jsonnavigator.data.JsonFilesystemRepository
@@ -9,28 +10,43 @@ import linc.com.jsonnavigator.device.AssetReader
 import linc.com.jsonnavigator.domain.interactors.FolderContentInteractorImpl
 import linc.com.jsonnavigator.ui.folder.FolderContentFragment
 import linc.com.jsonnavigator.ui.folder.FolderContentPresenter
+import linc.com.jsonnavigator.utils.PathFormatter
 import linc.com.jsonnavigator.utils.ScreenNavigator
 
 class MainActivity : AppCompatActivity(), NavigatorActivity {
 
     private lateinit var screenNavigator: ScreenNavigator
+    private lateinit var pathFormatter: PathFormatter
+    private lateinit var path: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        screenNavigator = ScreenNavigator(supportFragmentManager, R.id.container).apply {
-            navigateToFragment(FolderContentFragment.newInstance(Bundle.EMPTY), false)
-        }
-
+        path = findViewById(R.id.path)
+        pathFormatter = PathFormatter()
+        screenNavigator = ScreenNavigator(supportFragmentManager, R.id.container)
+        navigateToFragment(
+            FolderContentFragment.newInstance(Bundle.EMPTY),
+            false,
+            "") //todo root
     }
 
-    override fun navigateToFragment(fragment: Fragment, withBackStack: Boolean) {
+    override fun navigateToFragment(fragment: Fragment, withBackStack: Boolean, name: String) {
+        //todo refactor
+        pathFormatter.addNew(name)
         screenNavigator.navigateToFragment(fragment, withBackStack)
+        path.text = pathFormatter.getPath()
     }
 
     override fun popBackStack() {
         screenNavigator.popBackStack()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        pathFormatter.removaLast()
+        path.text = pathFormatter.getPath()
     }
 
 }

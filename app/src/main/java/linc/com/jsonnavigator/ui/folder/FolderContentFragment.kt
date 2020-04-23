@@ -16,6 +16,7 @@ import linc.com.jsonnavigator.domain.interactors.FolderContentInteractorImpl
 import linc.com.jsonnavigator.domain.models.FilesystemItemModel
 import linc.com.jsonnavigator.ui.NavigatorActivity
 import linc.com.jsonnavigator.ui.adapters.FilesystemItemsAdapter
+import linc.com.jsonnavigator.ui.file.FileContentFragment
 import linc.com.jsonnavigator.utils.isNull
 import linc.com.jsonnavigator.utils.toList
 
@@ -45,8 +46,6 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
         presenter?.bind(this)
 
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,15 +86,23 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
 
     override fun openFolder(folder: FilesystemItemModel) {
         (activity as NavigatorActivity).navigateToFragment(
-            fragment = newInstance(Bundle().apply {
+            fragment = FolderContentFragment.newInstance(Bundle().apply {
                 putParcelable("FOLDER", folder)
             }),
-            withBackStack = true
+            withBackStack = true,
+            name = folder.name
         )
     }
 
     override fun openFile(file: FilesystemItemModel) {
-        // todo start new fragment
+        println("OPEN_FI:E")
+        (activity as NavigatorActivity).navigateToFragment(
+            fragment = FileContentFragment.newInstance(Bundle().apply {
+                putParcelable("FILE", file)
+            }),
+            withBackStack = true,
+            name = file.name
+        )
     }
 
     override fun onClick(filesystemItem: FilesystemItemModel) {

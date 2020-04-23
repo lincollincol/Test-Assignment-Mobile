@@ -39,6 +39,8 @@ class FolderContentPresenter(
     }
 
     fun openFilesystemItem(filesystemItem: FilesystemItemModel) {
+        println(filesystemItem.type)
+        println(filesystemItem.name)
         if(filesystemItem.type == "FOLDER") {
             view?.openFolder(filesystemItem)
         }else {

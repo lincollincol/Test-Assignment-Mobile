@@ -14,7 +14,6 @@ class ScreenNavigator(
         val transaction = fragmentManager
             .beginTransaction()
             .replace(container, fragment)
-        println(fragment::class.java.simpleName)
         if(withBackStack) transaction.addToBackStack(null)
         transaction.commit()
     }
