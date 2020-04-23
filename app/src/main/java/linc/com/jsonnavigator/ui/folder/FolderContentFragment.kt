@@ -2,10 +2,16 @@ package linc.com.jsonnavigator.ui.folder
 
 
 import android.os.Bundle
+import android.transition.Fade
+import android.transition.Slide
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.BounceInterpolator
+import android.view.animation.LinearInterpolator
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -17,12 +23,11 @@ import linc.com.jsonnavigator.domain.models.FilesystemItemModel
 import linc.com.jsonnavigator.ui.NavigatorActivity
 import linc.com.jsonnavigator.ui.adapters.FilesystemItemsAdapter
 import linc.com.jsonnavigator.ui.file.FileContentFragment
-import linc.com.jsonnavigator.utils.isNull
-import linc.com.jsonnavigator.utils.toList
 
 class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdapter.OnFilesystemItemClickListener {
 
     private lateinit var filesystemAdapter: FilesystemItemsAdapter
+    private lateinit var noItems: TextView
     private var presenter: FolderContentPresenter? = null
 
     companion object {
@@ -44,6 +49,21 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
             )
         }
         presenter?.bind(this)
+
+        enterTransition = Fade(Fade.IN).apply {
+            interpolator = LinearInterpolator()
+            duration = 300
+        }
+
+        reenterTransition = Fade(Fade.IN).apply {
+            interpolator = LinearInterpolator()
+            duration = 300
+        }
+
+        exitTransition = Fade(Fade.OUT).apply {
+            interpolator = LinearInterpolator()
+            duration = 300
+        }
 
     }
 
@@ -70,6 +90,7 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
                 setHasFixedSize(true)
             }
 
+        noItems = view.findViewById<TextView>(R.id.noItems)
         presenter?.getData(arguments?.isEmpty ?: true)
     }
 
@@ -79,9 +100,8 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
 
     override fun showChildFolders() {
         val data = arguments!!.getParcelable<FilesystemItemModel>("FOLDER")
-        filesystemAdapter.setData(
-            data!!.items
-        )
+        filesystemAdapter.setData(data!!.items)
+        if(data.items.isEmpty()) noItems.visibility = View.VISIBLE
     }
 
     override fun openFolder(folder: FilesystemItemModel) {
