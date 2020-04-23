@@ -19,3 +19,15 @@
 - Соответствие гайдлайнам Material Design
 - Соответствие кода стандартам платформы
 - Минимальное API - 19
+
+### GIF
+<p align="center">
+<img src="https://github.com/lincollincol/Test-Assignment-Mobile/blob/master/demo/app.gif" width="200" height="400" hspace="40">
+</p>
+
+### Screenshots
+<img src="https://github.com/lincollincol/Test-Assignment-Mobile/blob/master/demo/src1.jpg" width="200" height="400" hspace="40"><img src="https://github.com/lincollincol/Test-Assignment-Mobile/blob/master/demo/src2.jpg" width="200" height="400" hspace="40"><img src="https://github.com/lincollincol/Test-Assignment-Mobile/blob/master/demo/src3.jpg" width="200" height="400" hspace="40">
+
+### Download
+<a href="https://github.com/lincollincol/Test-Assignment-Mobile/tree/master/demo">download here</a>
+
