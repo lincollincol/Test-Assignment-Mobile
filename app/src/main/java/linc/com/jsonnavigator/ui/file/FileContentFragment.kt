@@ -11,7 +11,7 @@ import android.widget.TextView
 
 import linc.com.jsonnavigator.R
 import linc.com.jsonnavigator.domain.models.FilesystemItemModel
-import linc.com.jsonnavigator.ui.folder.FolderContentFragment
+import linc.com.jsonnavigator.utils.Constants.Companion.KEY_FILE
 
 class FileContentFragment : Fragment() {
 
@@ -31,7 +31,7 @@ class FileContentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val data = arguments!!.getParcelable<FilesystemItemModel>("FILE")
+        val data = arguments!!.getParcelable<FilesystemItemModel>(KEY_FILE)
         val content = view.findViewById<TextView>(R.id.content).apply {
             text = data!!.content
         }

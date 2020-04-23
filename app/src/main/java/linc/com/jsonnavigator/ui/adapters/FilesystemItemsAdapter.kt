@@ -6,9 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RawRes
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import linc.com.jsonnavigator.R
 import linc.com.jsonnavigator.domain.models.FilesystemItemModel
+import linc.com.jsonnavigator.utils.Constants.Companion.DOCX
+import linc.com.jsonnavigator.utils.Constants.Companion.FOLDER
+import linc.com.jsonnavigator.utils.Constants.Companion.PDF
+import linc.com.jsonnavigator.utils.Constants.Companion.XLSX
 import linc.com.jsonnavigator.utils.PathFormatter
 import linc.com.jsonnavigator.utils.updateAll
 
@@ -46,16 +51,17 @@ class FilesystemItemsAdapter : RecyclerView.Adapter<FilesystemItemsAdapter.Files
         private val icon = itemView.findViewById<ImageView>(R.id.itemIcon)
 
         fun bind(filesystemItem: FilesystemItemModel) {
+            val context = itemView.context
             this.name.text = filesystemItem.name
 
-            if(filesystemItem.type == "FOLDER") {
+            if(filesystemItem.type == FOLDER) {
                 icon.setBackgroundResource(R.drawable.ic_folder)
             }else {
                 val fileIcon =
                     when(PathFormatter.getFileExt(filesystemItem.name)) {
-                        ".pdf" -> R.drawable.ic_pdf
-                        ".docx" -> R.drawable.ic_doc
-                        ".xlsx" -> R.drawable.ic_xlsx
+                        PDF -> R.drawable.ic_pdf
+                        DOCX -> R.drawable.ic_doc
+                        XLSX -> R.drawable.ic_xlsx
                         else -> R.drawable.ic_file
                     }
                 icon.setBackgroundResource(fileIcon)

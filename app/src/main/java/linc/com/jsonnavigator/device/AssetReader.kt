@@ -1,20 +1,18 @@
 package linc.com.jsonnavigator.device
 
 import android.content.res.AssetManager
+import linc.com.jsonnavigator.utils.Constants.Companion.SOURCE_FILE
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
-
 
 class AssetReader(
     private val assetManager: AssetManager
 ) {
 
     fun readJson(): String {
-        // todo to constants
-        val inputStream = assetManager.open("filesystem-sample.json")
-
+        val inputStream = assetManager.open(SOURCE_FILE)
         val jsonData = StringBuilder()
 
         BufferedReader(

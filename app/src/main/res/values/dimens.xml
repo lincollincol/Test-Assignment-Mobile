@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="height_item_filesystem">56dp</dimen>
+    <dimen name="height_path">56dp</dimen>
+    <dimen name="margin_large">20dp</dimen>
+    <dimen name="margin_medium">10dp</dimen>
+    <dimen name="text_large">25sp</dimen>
+    <dimen name="text_medium">20sp</dimen>
+    <dimen name="margin_small">5dp</dimen>
+    <dimen name="corner_card_medium">10dp</dimen>
+    <dimen name="elevation_small">5dp</dimen>
 </resources>

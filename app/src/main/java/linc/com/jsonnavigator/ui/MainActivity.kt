@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import linc.com.jsonnavigator.R
-import linc.com.jsonnavigator.data.JsonFilesystemRepository
-import linc.com.jsonnavigator.device.AssetReader
-import linc.com.jsonnavigator.domain.interactors.FolderContentInteractorImpl
 import linc.com.jsonnavigator.ui.folder.FolderContentFragment
-import linc.com.jsonnavigator.ui.folder.FolderContentPresenter
+import linc.com.jsonnavigator.utils.Constants.Companion.NOTHING
 import linc.com.jsonnavigator.utils.PathFormatter
 import linc.com.jsonnavigator.utils.ScreenNavigator
 
@@ -25,15 +22,15 @@ class MainActivity : AppCompatActivity(), NavigatorActivity {
 
         path = findViewById(R.id.path)
         pathFormatter = PathFormatter()
+
         screenNavigator = ScreenNavigator(supportFragmentManager, R.id.container)
         navigateToFragment(
             FolderContentFragment.newInstance(Bundle.EMPTY),
             false,
-            "") //todo root
+            NOTHING)
     }
 
     override fun navigateToFragment(fragment: Fragment, withBackStack: Boolean, name: String) {
-        //todo refactor
         pathFormatter.addNew(name)
         screenNavigator.navigateToFragment(fragment, withBackStack)
         path.text = pathFormatter.getPath()
@@ -45,7 +42,7 @@ class MainActivity : AppCompatActivity(), NavigatorActivity {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        pathFormatter.removaLast()
+        pathFormatter.removeLast()
         path.text = pathFormatter.getPath()
     }
 

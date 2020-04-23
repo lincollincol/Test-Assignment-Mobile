@@ -8,5 +8,5 @@ interface FolderContentView {
     fun showChildFolders()
     fun openFolder(folder: FilesystemItemModel)
     fun openFile(file: FilesystemItemModel)
-
+    fun showError(message: String)
 }

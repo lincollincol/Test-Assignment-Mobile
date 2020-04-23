@@ -7,14 +7,11 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
+import linc.com.jsonnavigator.utils.Constants.Companion.OVER_SCROLL_AREA
 
 
 class OverScrollBehavior(context: Context, attributeSet: AttributeSet)
     : CoordinatorLayout.Behavior<View>() {
-
-    companion object {
-        private const val OVER_SCROLL_AREA = 4
-    }
 
     private var overScrollY = 0
 
@@ -45,7 +42,7 @@ class OverScrollBehavior(context: Context, attributeSet: AttributeSet)
             return
         }
 
-        overScrollY -= (dyUnconsumed/ OVER_SCROLL_AREA)
+        overScrollY -= (dyUnconsumed / OVER_SCROLL_AREA)
         val group = target as ViewGroup
         val count = group.childCount
         for (i in 0 until count) {
@@ -60,7 +57,6 @@ class OverScrollBehavior(context: Context, attributeSet: AttributeSet)
         target: View,
         type: Int
     ) {
-        // Smooth animate to 0 when the user stops scrolling
         moveToDefPosition(target)
     }
 
@@ -71,11 +67,9 @@ class OverScrollBehavior(context: Context, attributeSet: AttributeSet)
         velocityX: Float,
         velocityY: Float
     ): Boolean {
-        // Scroll view by inertia when current position equals to 0
         if (overScrollY == 0) {
             return false
         }
-        // Smooth animate to 0 when user fling view
         moveToDefPosition(target)
         return true
     }

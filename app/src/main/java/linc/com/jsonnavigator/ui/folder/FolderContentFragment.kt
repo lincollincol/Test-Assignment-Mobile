@@ -1,28 +1,28 @@
 package linc.com.jsonnavigator.ui.folder
 
-
 import android.os.Bundle
 import android.transition.Fade
-import android.transition.Slide
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.BounceInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import linc.com.jsonnavigator.R
-import linc.com.jsonnavigator.data.JsonFilesystemRepository
+import linc.com.jsonnavigator.data.JsonFilesystemRepositoryImpl
 import linc.com.jsonnavigator.device.AssetReader
 import linc.com.jsonnavigator.domain.interactors.FolderContentInteractorImpl
 import linc.com.jsonnavigator.domain.models.FilesystemItemModel
 import linc.com.jsonnavigator.ui.NavigatorActivity
 import linc.com.jsonnavigator.ui.adapters.FilesystemItemsAdapter
 import linc.com.jsonnavigator.ui.file.FileContentFragment
+import linc.com.jsonnavigator.utils.Constants.Companion.DURATION_SMALL
+import linc.com.jsonnavigator.utils.Constants.Companion.KEY_FILE
+import linc.com.jsonnavigator.utils.Constants.Companion.KEY_FOLDER
 
 class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdapter.OnFilesystemItemClickListener {
 
@@ -42,27 +42,28 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
         if(presenter == null ) {
             presenter = FolderContentPresenter(
                 FolderContentInteractorImpl(
-                    JsonFilesystemRepository(
+                    JsonFilesystemRepositoryImpl(
                         AssetReader(activity!!.assets)
                     )
                 )
             )
         }
+
         presenter?.bind(this)
 
         enterTransition = Fade(Fade.IN).apply {
             interpolator = LinearInterpolator()
-            duration = 300
+            duration = DURATION_SMALL
         }
 
         reenterTransition = Fade(Fade.IN).apply {
             interpolator = LinearInterpolator()
-            duration = 300
+            duration = DURATION_SMALL
         }
 
         exitTransition = Fade(Fade.OUT).apply {
             interpolator = LinearInterpolator()
-            duration = 300
+            duration = DURATION_SMALL
         }
 
     }
@@ -71,19 +72,17 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_folder_content, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        filesystemAdapter = FilesystemItemsAdapter()
-            .apply {
-                setOnFilesytemItemClickListener(this@FolderContentFragment)
-            }
+        filesystemAdapter = FilesystemItemsAdapter().apply {
+            setOnFilesytemItemClickListener(this@FolderContentFragment)
+        }
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.filesystemItems)
+        view.findViewById<RecyclerView>(R.id.filesystemItems)
             .apply {
                 layoutManager = LinearLayoutManager(activity)
                 adapter = filesystemAdapter
@@ -99,7 +98,7 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
     }
 
     override fun showChildFolders() {
-        val data = arguments!!.getParcelable<FilesystemItemModel>("FOLDER")
+        val data = arguments!!.getParcelable<FilesystemItemModel>(KEY_FOLDER)
         filesystemAdapter.setData(data!!.items)
         if(data.items.isEmpty()) noItems.visibility = View.VISIBLE
     }
@@ -107,7 +106,7 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
     override fun openFolder(folder: FilesystemItemModel) {
         (activity as NavigatorActivity).navigateToFragment(
             fragment = FolderContentFragment.newInstance(Bundle().apply {
-                putParcelable("FOLDER", folder)
+                putParcelable(KEY_FOLDER, folder)
             }),
             withBackStack = true,
             name = folder.name
@@ -115,21 +114,23 @@ class FolderContentFragment : Fragment(), FolderContentView, FilesystemItemsAdap
     }
 
     override fun openFile(file: FilesystemItemModel) {
-        println("OPEN_FI:E")
         (activity as NavigatorActivity).navigateToFragment(
             fragment = FileContentFragment.newInstance(Bundle().apply {
-                putParcelable("FILE", file)
+                putParcelable(KEY_FILE, file)
             }),
             withBackStack = true,
             name = file.name
         )
     }
 
+    override fun showError(message: String) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onClick(filesystemItem: FilesystemItemModel) {
         println(filesystemItem.name)
         presenter?.openFilesystemItem(filesystemItem)
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
